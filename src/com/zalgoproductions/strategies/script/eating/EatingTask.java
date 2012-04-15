@@ -24,13 +24,10 @@ public class EatingTask implements Task {
 				toEat.getWidgetChild().interact("Eat");
 			}
 			Time.sleep(Random.nextInt(500, 800));
-		} else if (	Inventory.getCount(Eating.bonesFilter) > 0) {
-			if(Eating.canB2B()) {
-				Eating.castB2B();
-			} else if (Eating.canB2P()) {
-				Eating.castB2P();
-			}
-			Time.sleep(Random.nextInt(500, 800));
+		} if(Eating.canB2B() && Inventory.getCount(Eating.bonesFilter) > 0) {
+			Eating.castB2B();
+		} else if (Eating.canB2P() && Inventory.getCount(Eating.bonesFilter) > 0) {
+			Eating.castB2P();
 		} else {
 			ExitCondition.stopScript();
 		}		
