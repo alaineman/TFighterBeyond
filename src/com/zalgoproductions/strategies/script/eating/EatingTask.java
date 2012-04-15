@@ -1,6 +1,6 @@
 package com.zalgoproductions.strategies.script.eating;
 
-import com.zalgoproductions.strategies.script.exit.ExitCondition;
+import com.zalgoproductions.script.TFighterBeyond;
 import com.zalgoproductions.util.Eating;
 import org.powerbot.concurrent.Task;
 import org.powerbot.game.api.methods.tab.Inventory;
@@ -29,7 +29,7 @@ public class EatingTask implements Task {
 		} else if (Eating.canB2P() && Inventory.getCount(Eating.bonesFilter) > 0) {
 			Eating.castB2P();
 		} else {
-			ExitCondition.stopScript();
+			TFighterBeyond.getInstance().stop();
 		}		
 	}
 }

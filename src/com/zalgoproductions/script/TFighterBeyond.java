@@ -17,8 +17,6 @@ import com.zalgoproductions.strategies.script.continuing.ContinueCondition;
 import com.zalgoproductions.strategies.script.continuing.ContinueTask;
 import com.zalgoproductions.strategies.script.eating.EatingCondition;
 import com.zalgoproductions.strategies.script.eating.EatingTask;
-import com.zalgoproductions.strategies.script.exit.ExitCondition;
-import com.zalgoproductions.strategies.script.exit.ExitTask;
 import com.zalgoproductions.strategies.script.explorersring.RingCondition;
 import com.zalgoproductions.strategies.script.explorersring.RingTask;
 import com.zalgoproductions.strategies.script.looting.LootingCondition;
@@ -63,12 +61,14 @@ import java.awt.event.MouseListener;
  */
 @Manifest(name = "TFighter Beyond", description = "Universal Fighter", version = 0.51d, authors = {"Zalgo2462"}, premium = false)
 public class TFighterBeyond extends ActiveScript implements PaintListener, MouseListener {
+	private static ActiveScript instance;
 	public static boolean needsSetup = true;
 	public static long startTime;
 	public static final Manifest mani = TFighterBeyond.class.getAnnotation(Manifest.class);
 	
 	@Override
 	protected void setup() {
+		instance = this;
 		log.info("Welcome the TFighter Beyond. Going beyond what reality allows.");
 		if(!Game.isLoggedIn()) {
 			log.info("Start the script logged in!");
@@ -79,10 +79,6 @@ public class TFighterBeyond extends ActiveScript implements PaintListener, Mouse
 		antibanStrategy.setLock(false);
 		antibanStrategy.setReset(false);
 		provide(antibanStrategy);
-
-		Strategy stopStrategy = new Strategy(new ExitCondition(), new ExitTask(this));
-		stopStrategy.setLock(true);
-		stopStrategy.setReset(true);
 
 		Strategy setupStrategy = new Strategy(new SetupCondition(), new SetupTask());
 		setupStrategy.setLock(true);
@@ -201,6 +197,10 @@ public class TFighterBeyond extends ActiveScript implements PaintListener, Mouse
 	
 	public static long getRunTime() {
 		return System.currentTimeMillis() - startTime;
+	}
+
+	public static ActiveScript getInstance() {
+		return instance;
 	}
 
 	public void mouseClicked(MouseEvent e) {
