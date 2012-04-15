@@ -10,7 +10,11 @@ import org.powerbot.game.api.wrappers.node.Item;
 
 public class EatingTask implements Task {
 	public void run() {
-		if(Inventory.getCount(Eating.foodFilter) > 0) {
+		if(Eating.canB2B() && Inventory.getCount(Eating.bonesFilter) > 0) {
+			Eating.castB2B();
+		} else if (Eating.canB2P() && Inventory.getCount(Eating.bonesFilter) > 0) {
+			Eating.castB2P();
+		} else if(Inventory.getCount(Eating.foodFilter) > 0) {
 			Item[] foods = Inventory.getItems();
 			Item toEat = null;
 
@@ -24,11 +28,7 @@ public class EatingTask implements Task {
 				toEat.getWidgetChild().interact("Eat");
 			}
 			Time.sleep(Random.nextInt(500, 800));
-		} if(Eating.canB2B() && Inventory.getCount(Eating.bonesFilter) > 0) {
-			Eating.castB2B();
-		} else if (Eating.canB2P() && Inventory.getCount(Eating.bonesFilter) > 0) {
-			Eating.castB2P();
-		} else {
+		}  else {
 			TFighterBeyond.getInstance().stop();
 		}		
 	}
