@@ -1,4 +1,4 @@
-package com.zalgoproductions.strategies.script.incombat;
+package com.zalgoproductions.strategies.script.inCombat;
 
 import org.powerbot.concurrent.strategy.Condition;
 import org.powerbot.game.api.methods.interactive.Players;

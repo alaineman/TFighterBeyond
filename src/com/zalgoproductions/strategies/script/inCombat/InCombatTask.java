@@ -1,4 +1,4 @@
-package com.zalgoproductions.strategies.script.incombat;
+package com.zalgoproductions.strategies.script.inCombat;
 
 import com.zalgoproductions.util.Attacking;
 import org.powerbot.concurrent.Task;
