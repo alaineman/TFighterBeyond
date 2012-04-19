@@ -8,6 +8,8 @@ import org.powerbot.game.api.util.Random;
 import org.powerbot.game.api.util.Time;
 import org.powerbot.game.client.input.Canvas;
 
+import java.awt.*;
+
 public class AntibanTask implements Task {
 	public void run() {
 		
@@ -19,6 +21,15 @@ public class AntibanTask implements Task {
 
 		Thread mouseThread = new Thread() {
 			public void run() {
+				Point fp = Mouse.getLocation();
+				try {
+					sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+				}
+				if(fp != Mouse.getLocation())
+					return;
+
 				switch(Random.nextInt(0, 5)) {
 					case 0:
 						Mouse.putSide(Random.nextInt(0, 5));

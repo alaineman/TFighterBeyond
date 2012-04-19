@@ -1,5 +1,6 @@
 package com.zalgoproductions.util;
 
+import com.zalgoproductions.strategies.script.areagenerator.AreaGeneratorTask;
 import org.powerbot.game.api.methods.Calculations;
 import org.powerbot.game.api.methods.input.Mouse;
 import org.powerbot.game.api.methods.interactive.Players;
@@ -24,7 +25,8 @@ public class Looting {
 	public static final Filter<GroundItem> LOOT_FILTER =
 			new Filter<GroundItem>() {
 				public boolean accept(GroundItem item) {
-					if(Calculations.distance(Players.getLocal().getLocation(), item.getLocation()) < maxRadius) {
+					if(Calculations.distance(Players.getLocal().getLocation(), item.getLocation()) < maxRadius &&
+							(AreaGeneratorTask.currentRoom.npoints == 0 || AreaGeneratorTask.currentRoom.contains(item.getLocation()))) {
 						for(int id : lootIDs) {
 							if (item.getGroundItem().getId() == id) {
 								return true;
@@ -50,10 +52,10 @@ public class Looting {
 		lootNames = names;
 	}
 
-	//Author: Zasz
+	//Author: Zasz and Wade
 	public static void takeitem(GroundItem item) {
 		Point point = item.getCentralPoint();
-		point = new Point(point.x - 3, point.y - 10);
+		point = new Point(point.x - Random.nextInt(0, 5), point.y - Random.nextInt(0, 5));
 		boolean taken = false;
 		for (int i = 0; i < 7; i++) {
 			Mouse.move(point.x, point.y);

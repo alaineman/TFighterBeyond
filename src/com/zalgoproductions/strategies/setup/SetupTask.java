@@ -2,6 +2,7 @@ package com.zalgoproductions.strategies.setup;
 
 import com.zalgoproductions.resources.Fonts;
 import com.zalgoproductions.script.TFighterBeyond;
+import com.zalgoproductions.strategies.script.areagenerator.AreaGeneratorCondition;
 import com.zalgoproductions.util.*;
 import com.zalgoproductions.util.paint.Paint;
 import org.powerbot.concurrent.Task;
@@ -27,6 +28,7 @@ public class SetupTask implements Task {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					zui.setResizable(false);
+					zui.setLocation(250, 200);
 					zui.setVisible(true);
 				}
 			});
@@ -43,7 +45,7 @@ public class SetupTask implements Task {
 //		private final File file;
 
 		
-		private JCheckBox useMulti, useSafe, useBones, usePrayer;
+		private JCheckBox useMulti, useSpec, useSafe, useBones, usePrayer, useBFS;
 
 		private JTextField npcBox, lootBox, lootAboveBox, alchBox, foodBox;
 
@@ -83,14 +85,14 @@ public class SetupTask implements Task {
 					npcBox = new JTextField("barbarian,278,dragon");
 					useMulti = new JCheckBox("Attack monsters that are fighting others");
 					useSafe = new JCheckBox("Use a safespot");
-//					disableSpecials = new JCheckBox("Disable special attacks");
+					useSpec = new JCheckBox("Use special attacks");
 
 					title.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 					npcLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 					npcBox.setAlignmentX(JTextField.CENTER_ALIGNMENT);
 					useMulti.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
 					useSafe.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
-//					disableSpecials.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
+					useSpec.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
 
 					npcBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, npcBox.getPreferredSize().height));
 					npcBox.setColumns(25);
@@ -118,7 +120,8 @@ public class SetupTask implements Task {
 					combat.add(new JLabel(" "));
 					combat.add(useMulti);
 					combat.add(useSafe);
-//					combat.add(disableSpecials);
+					combat.add(new JLabel(" "));
+					combat.add(useSpec);
 					combat.add(Box.createVerticalGlue());
 					combat.add(Box.createRigidArea(new Dimension(1,1)));
 				}
@@ -221,12 +224,14 @@ public class SetupTask implements Task {
 					alchBox = new JTextField("");
 					usePrayer = new JCheckBox("Use Quick Prayers");
 					useBones = new JCheckBox("Bury the bones you loot");
+					useBFS = new JCheckBox("Check if you can reach a npcs and loot.");
 
 					miscLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 					alchLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 					alchBox.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 					usePrayer.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
 					useBones.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
+					useBFS.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
 					
 
 					alchBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, alchBox.getPreferredSize().height));
@@ -253,6 +258,8 @@ public class SetupTask implements Task {
 					misc.add(new JLabel(" "));
 					misc.add(usePrayer);
 					misc.add(useBones);
+					misc.add(new JLabel(" "));
+					misc.add(useBFS);
 				}
 
 				JTabbedPane tabbedPane = new JTabbedPane();
@@ -323,9 +330,12 @@ public class SetupTask implements Task {
 			public void actionPerformed(ActionEvent e) {
 //				saveProperties();
 				Attacking.utilizeMultiwayCombat = useMulti.isSelected();
+				Attacking.useSpec = useSpec.isSelected();
 				Safespot.useSafespot = useSafe.isSelected();
 				Bones.buryBones = useBones.isSelected();
 				Prayer.usePrayer = usePrayer.isSelected();
+				AreaGeneratorCondition.doGeneration = useBFS.isSelected();
+				
 //				u.loot.onlyTakeLootFromKilled = onlyLoot.isSelected();
 //				u.loot.lootAbove = lootAbove.isSelected();
 //				u.loot.lootAboveX = Integer.parseInt(lootAboveBox.getText());
@@ -336,7 +346,7 @@ public class SetupTask implements Task {
 //				u.bank.minimumFood = Integer.parseInt(foodBox.getText().split(",")[0]);
 //				u.bank.maximumFood = Integer.parseInt(foodBox.getText().split(",")[1]);
 
-				String[] ids = npcBox.getText().split(",");
+				String[] ids = npcBox.getText().replace(", ", ",").split(",");
 				ArrayList<Integer> idList = new ArrayList<Integer>();
 				ArrayList<String> nameList = new ArrayList<String>();
 				for (String id3 : ids) {
@@ -352,7 +362,7 @@ public class SetupTask implements Task {
 				Attacking.setNPCIds(idList.size() > 0 ? toIntArray(idList.toArray(new Integer[idList.size()])) : new int[0]);
 				Attacking.setNPCNames(nameList.size() > 0 ? nameList.toArray(new String[nameList.size()]) : new String[0]);
 
-				ids = lootBox.getText().split(",");
+				ids = lootBox.getText().replace(", ", ",").split(",");
 				idList = new ArrayList<Integer>();
 				nameList = new ArrayList<String>();
 				for (String id2 : ids) {
@@ -369,7 +379,7 @@ public class SetupTask implements Task {
 				Looting.setLootIds(idList.size() > 0 ? toIntArray(idList.toArray(new Integer[idList.size()])) : new int[0]);
 				Looting.setLootNames(nameList.size() > 0 ? nameList.toArray(new String[nameList.size()]) : new String[0]);
 
-				ids = alchBox.getText().split(",");
+				ids = alchBox.getText().replace(", ", ",").split(",");
 				idList = new ArrayList<Integer>();
 				nameList = new ArrayList<String>();
 				for (String id1 : ids) {
@@ -387,7 +397,7 @@ public class SetupTask implements Task {
 				Alchemy.setAlchIds(idList.size() > 0 ? toIntArray(idList.toArray(new Integer[idList.size()])) : new int[0]);
 				Alchemy.setAlchNames(nameList.size() > 0 ? nameList.toArray(new String[nameList.size()]) : new String[0]);
 
-				ids = foodBox.getText().split(",");
+				ids = foodBox.getText().replace(", ", ",").split(",");
 				idList = new ArrayList<Integer>();
 				nameList = new ArrayList<String>();
 				for (String id4 : ids) {

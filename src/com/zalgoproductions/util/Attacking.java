@@ -1,5 +1,6 @@
 package com.zalgoproductions.util;
 
+import com.zalgoproductions.strategies.script.areagenerator.AreaGeneratorTask;
 import org.powerbot.game.api.methods.Calculations;
 import org.powerbot.game.api.methods.Settings;
 import org.powerbot.game.api.methods.Tabs;
@@ -19,6 +20,7 @@ public class Attacking {
 	public static boolean utilizeMultiwayCombat = false;
 	public static Item[] playerEquipment = {};
 
+	public static boolean useSpec = true;
 	private static final int[] specWeaponUsage = {10, 25, 33, 35, 45, 50, 55, 60, 80, 85, 100};
 	private static final String[][] specWeapons = {
 			{"Rune thrownaxe", "Rod of ivandis"},
@@ -41,13 +43,13 @@ public class Attacking {
 					"Ancient Mace", "Saradomin sword"}};
 	
 	
-	private static final int maxRadius = Integer.MAX_VALUE;
+	private static final int maxRadius = Safespot.useSafespot ? 15 : Integer.MAX_VALUE;
 
 	public static final Filter<NPC> NPC_FILTER =
 			new Filter<NPC>() {
 				public boolean accept(NPC npc) {
 					if(npc.validate() && npc.getHpPercent() > 0 && Calculations.distance(Players.getLocal().getLocation(), npc.getLocation()) < maxRadius &&
-							(utilizeMultiwayCombat || !npc.isInCombat() && npc.getInteracting() == null)) {
+							(utilizeMultiwayCombat || !npc.isInCombat() && npc.getInteracting() == null) && canAttack(npc)) {
 						for(int id : npcIds) {
 							if (npc.getId() == id) {
 								return true;
@@ -60,6 +62,12 @@ public class Attacking {
 						}
 					}
 					return false;
+				}
+				
+				private boolean canAttack(NPC npc) {
+					return isUsingRangedWeapon() ? 
+							AreaGeneratorTask.rangedRoom.npoints == 0 || AreaGeneratorTask.rangedRoom.contains(npc.getLocation()) :
+							AreaGeneratorTask.currentRoom.npoints == 0 || AreaGeneratorTask.currentRoom.contains(npc.getLocation());
 				}
 			};
 	
@@ -100,6 +108,11 @@ public class Attacking {
 		//45 => Aura
 	}
 
+	public static boolean isUsingRangedWeapon() {
+		return playerEquipment[3].getName().toLowerCase().contains("dart") || playerEquipment[3].getName().toLowerCase().contains("knife") ||
+				playerEquipment[3].getName().toLowerCase().contains("thrownaxe") || playerEquipment[3].getName().toLowerCase().contains("bow");
+	}
+
 	public static void setSpecialAttack(boolean set) {
 		if (isSpecialEnabled() != set) {
 			Tabs.ATTACK.open();
@@ -111,7 +124,7 @@ public class Attacking {
 	}
 
 	public static boolean shouldSpecial() {
-		if(playerEquipment[3] != null) {
+		if(playerEquipment[3] != null && useSpec) {
 			for (int i = 0; i < specWeapons.length; i++) {
 				for (int j = 0; j < specWeapons[i].length; j++) {
 					if (specWeapons[i][j].equalsIgnoreCase(playerEquipment[3].getName())) {

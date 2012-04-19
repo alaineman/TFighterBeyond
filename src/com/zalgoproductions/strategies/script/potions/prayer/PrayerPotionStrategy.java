@@ -12,8 +12,9 @@ public class PrayerPotionStrategy extends PotionStrategy{
 
 	@Override
 	protected boolean needsPotion() {
-		double restoration = 70 + Math.floor(2.5 * Skills.getRealLevel(Skills.PRAYER));
+		int restoration = 70 + (int)Math.floor(2.5 * Skills.getRealLevel(Skills.PRAYER));
 		int prayerUsed = Prayer.getMaxPrayerPoints() - Prayer.getPrayerPoints();
 		return restoration <= prayerUsed;
 	}
 }
+

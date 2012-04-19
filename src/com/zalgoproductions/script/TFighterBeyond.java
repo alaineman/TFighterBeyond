@@ -7,6 +7,8 @@ import com.zalgoproductions.strategies.script.ammo.AmmoCondition;
 import com.zalgoproductions.strategies.script.ammo.AmmoTask;
 import com.zalgoproductions.strategies.script.antiban.AntibanCondition;
 import com.zalgoproductions.strategies.script.antiban.AntibanTask;
+import com.zalgoproductions.strategies.script.areagenerator.AreaGeneratorCondition;
+import com.zalgoproductions.strategies.script.areagenerator.AreaGeneratorTask;
 import com.zalgoproductions.strategies.script.attacking.AttackCondition;
 import com.zalgoproductions.strategies.script.attacking.AttackTask;
 import com.zalgoproductions.strategies.script.bones.BonesCondition;
@@ -54,13 +56,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
+ * V0.60 Bug Fixes Galore: Current Area Checking; Fix Mouse Spazz; Optionally Use Special Attacks;
+ * Hopefully fixed: Eating in multi-combat and prayer potions.....
  * V0.52 Fix B2P and B2B
  * V0.51 Bug Fixes
- * V0.5 SDN RELEASE
- * V0.2 Bug Fixes and B2B, B2P
- * V0.1 Public Beta Start
+ * V0.50 SDN RELEASE
+ * V0.20 Bug Fixes and B2B, B2P
+ * V0.10 Public Beta Start
  */
-@Manifest(name = "TFighter Beyond", description = "Universal Fighter", version = 0.52d, authors = {"Zalgo2462"}, premium = false)
+@Manifest(name = "TFighter Beyond", description = "Universal Fighter", version = 0.60d, authors = {"Zalgo2462"}, premium = false)
 public class TFighterBeyond extends ActiveScript implements PaintListener, MouseListener {
 	private static ActiveScript instance;
 	public static boolean needsSetup = true;
@@ -80,6 +84,11 @@ public class TFighterBeyond extends ActiveScript implements PaintListener, Mouse
 		antibanStrategy.setLock(false);
 		antibanStrategy.setReset(false);
 		provide(antibanStrategy);
+		
+		Strategy areaGenerator = new Strategy(new AreaGeneratorCondition(), new AreaGeneratorTask());
+		areaGenerator.setLock(false);
+		areaGenerator.setReset(false);
+		provide(areaGenerator);
 
 		Strategy setupStrategy = new Strategy(new SetupCondition(), new SetupTask());
 		setupStrategy.setLock(true);
@@ -174,6 +183,7 @@ public class TFighterBeyond extends ActiveScript implements PaintListener, Mouse
 		for(String str : debug) {
 			g.drawString(str, x, y += g.getFontMetrics().getMaxAscent());
 		}
+		
 		if(Paint.shouldPaint()) {
 			g.setColor(Color.GREEN);
 			for(NPC npc : NPCs.getLoaded(Attacking.NPC_FILTER)) {
