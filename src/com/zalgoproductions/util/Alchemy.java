@@ -59,22 +59,22 @@ public class Alchemy {
 		return canLowAlch();
 	}
 
-	private static boolean canHighAlch() {
+	public static boolean canHighAlch() {
 		return Inventory.getCount(true, NATURE_RUNE) >= 1
 				&& Skills.getLevel(Skills.MAGIC) >= 55
-				&& (Inventory.getCount(true, FIRE_RUNE) >= 5
-					|| Attacking.playerEquipment[3].getName().toLowerCase().contains("fire")
-					|| Attacking.playerEquipment[3].getName().toLowerCase().contains("steam")
-					|| Attacking.playerEquipment[3].getName().toLowerCase().contains("lava"));
+				&& (Inventory.getCount(true, FIRE_RUNE) >= 5 || hasFireStaff());
 	}
 
-	private static boolean canLowAlch() {
+	public static boolean canLowAlch() {
 		return Inventory.getCount(true, NATURE_RUNE) >= 1
 				&& Skills.getLevel(Skills.MAGIC) >= 21
-				&& (Inventory.getCount(true, FIRE_RUNE) >= 3
-					|| Attacking.playerEquipment[3].getName().toLowerCase().contains("fire")
-					|| Attacking.playerEquipment[3].getName().toLowerCase().contains("steam")
-					|| Attacking.playerEquipment[3].getName().toLowerCase().contains("lava"));
+				&& (Inventory.getCount(true, FIRE_RUNE) >= 3 || hasFireStaff());
+	}
+	
+	private static boolean hasFireStaff() {
+		return Attacking.playerEquipment[3].getName().toLowerCase().contains("fire")
+		    	|| Attacking.playerEquipment[3].getName().toLowerCase().contains("steam")
+			|| Attacking.playerEquipment[3].getName().toLowerCase().contains("lava"));
 	}
 
 	public static boolean alch(Item i) {
