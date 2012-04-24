@@ -25,9 +25,10 @@ public class Alchemy {
 			if (i.getWidgetChild() == null || i.getId() == -1) {
 				return false;
 			}
-			String itemName = i.getName().toLowerCase();
-			for (String s : alchNames) {
-				if (itemName.contains(s)) {
+			final String ITEM_NAME = i.getName().toLowerCase();
+			for (String alchName : alchNames) {
+				// alchNames should consist only of lowercase strings.  See setAlchNames()
+				if (ITEM_NAME.contains(alchName)) {
 					return true;
 				}
 			}
@@ -46,11 +47,16 @@ public class Alchemy {
 	}
 
 	public static void setAlchNames(String[] names) {
-		alchNames = names;
+		if (names != null) {
+			alchNames = names;
+			for (int i = 0; i < alchNames.length; i++) {
+				alchNames[i] = alchNames[i].toLowerCase();
+			}
+		}
 	}
 
 	public static boolean canAlch() {
-		return canHighAlch() || canLowAlch();
+		return canLowAlch();
 	}
 
 	private static boolean canHighAlch() {
