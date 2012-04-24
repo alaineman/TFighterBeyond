@@ -17,7 +17,7 @@ import org.powerbot.game.api.wrappers.node.Item;
 import org.powerbot.game.api.wrappers.widget.Widget;
 import org.powerbot.game.api.wrappers.widget.WidgetChild;
 
-public class Attacking {
+public final class Attacking {
 	
 	private static int[] npcIds = {};
 	private static String[] npcNames = {};
