@@ -1,23 +1,21 @@
 package com.zalgoproductions.util;
 
-import java.util.HashMap;
-
+import com.zalgoproductions.strategies.script.areagenerator.AreaGeneratorCondition;
 import com.zalgoproductions.strategies.script.areagenerator.AreaGeneratorTask;
-
 import org.powerbot.game.api.methods.Calculations;
 import org.powerbot.game.api.methods.Settings;
 import org.powerbot.game.api.methods.Tabs;
 import org.powerbot.game.api.methods.Widgets;
 import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.util.Filter;
-import org.powerbot.game.api.util.Random;
-import org.powerbot.game.api.util.Time;
 import org.powerbot.game.api.wrappers.interactive.NPC;
 import org.powerbot.game.api.wrappers.node.Item;
 import org.powerbot.game.api.wrappers.widget.Widget;
 import org.powerbot.game.api.wrappers.widget.WidgetChild;
 
-public final class Attacking {
+import java.util.HashMap;
+
+public class Attacking {
 	
 	private static int[] npcIds = {};
 	private static String[] npcNames = {};
@@ -27,15 +25,14 @@ public final class Attacking {
 	public static boolean utilizeMultiwayCombat = false;
 	public static Item[] playerEquipment = {};
 	public static boolean useSpec = true;
-	public static final Filter<NPC> NPC_FILTER = new Filter<NPC>() {
 
-		@Override
+	public static final Filter<NPC> NPC_FILTER = new Filter<NPC>() {
 		public boolean accept(NPC npc) {
 			if (npc.validate() && npc.getHpPercent() > 0
 					&& Calculations.distance(Players.getLocal().getLocation(),
 							npc.getLocation()) < maxRadius
 					&& (utilizeMultiwayCombat || !npc.isInCombat()
-							&& npc.getInteracting() == null) && canAttack(npc)) {
+							&& npc.getInteracting() == null) && (!AreaGeneratorCondition.doGeneration || canAttack(npc))) {
 				for (int id : npcIds) {
 					if (npc.getId() == id) {
 						return true;
@@ -52,6 +49,7 @@ public final class Attacking {
 			return false;
 		}
 	};
+
 	public static final HashMap<String, Integer> SPECIAL_WEAPONS = new HashMap<String, Integer>() {
 		{
 			put("rune thrownaxe", 10);
@@ -106,10 +104,8 @@ public final class Attacking {
 
 	private static boolean canAttack(NPC npc) {
 		return isUsingRangedWeapon() ? 
-				AreaGeneratorTask.rangedRoom.npoints == 0
-					|| AreaGeneratorTask.rangedRoom.contains(npc.getLocation()) :
-				AreaGeneratorTask.currentRoom.npoints == 0
-					|| AreaGeneratorTask.currentRoom.contains(npc.getLocation());
+				AreaGeneratorTask.rangedRoom.contains(npc.getLocation()) :
+				AreaGeneratorTask.currentRoom.contains(npc.getLocation());
 	}
 
 	public static void setNPCIds(int[] ids) {

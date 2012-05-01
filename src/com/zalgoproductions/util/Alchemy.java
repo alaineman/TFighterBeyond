@@ -5,8 +5,6 @@ import org.powerbot.game.api.methods.Widgets;
 import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.methods.tab.Skills;
 import org.powerbot.game.api.util.Filter;
-import org.powerbot.game.api.util.Random;
-import org.powerbot.game.api.util.Time;
 import org.powerbot.game.api.wrappers.node.Item;
 import org.powerbot.game.api.wrappers.widget.Widget;
 
@@ -19,8 +17,6 @@ public class Alchemy {
 	private static final int FIRE_RUNE = 554;
 
 	public static final Filter<Item> ALCH_FILTER = new Filter<Item>() {
-
-		@Override
 		public boolean accept(Item i) {
 			if (i.getWidgetChild() == null || i.getId() == -1) {
 				return false;
@@ -39,7 +35,6 @@ public class Alchemy {
 			}
 			return false;
 		}
-
 	};
 
 	public static void setAlchIds(int[] ids) {
@@ -74,7 +69,7 @@ public class Alchemy {
 	private static boolean hasFireStaff() {
 		return Attacking.playerEquipment[3].getName().toLowerCase().contains("fire")
 		    	|| Attacking.playerEquipment[3].getName().toLowerCase().contains("steam")
-			|| Attacking.playerEquipment[3].getName().toLowerCase().contains("lava"));
+			|| Attacking.playerEquipment[3].getName().toLowerCase().contains("lava");
 	}
 
 	public static boolean alch(Item i) {

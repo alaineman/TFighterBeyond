@@ -56,6 +56,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
+ * V0.70 More and More Bug Fixes. Upgraded for RSBot 4008 //Credit: Daniel987600
  * V0.60 Bug Fixes Galore: Current Area Checking; Fix Mouse Spazz; Optionally Use Special Attacks;
  * Hopefully fixed: Eating in multi-combat and prayer potions.....
  * V0.52 Fix B2P and B2B
@@ -64,7 +65,7 @@ import java.awt.event.MouseListener;
  * V0.20 Bug Fixes and B2B, B2P
  * V0.10 Public Beta Start
  */
-@Manifest(name = "TFighter Beyond", description = "Universal Fighter", version = 0.60d, authors = {"Zalgo2462"}, premium = false)
+@Manifest(name = "TFighter Beyond", description = "Universal Fighter", version = 0.70d, authors = {"Zalgo2462"}, premium = false)
 public class TFighterBeyond extends ActiveScript implements PaintListener, MouseListener {
 	private static ActiveScript instance;
 	public static boolean needsSetup = true;

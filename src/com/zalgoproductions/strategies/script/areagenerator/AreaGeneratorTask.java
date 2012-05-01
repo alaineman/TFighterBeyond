@@ -13,8 +13,8 @@ import java.util.LinkedList;
 import static com.zalgoproductions.util.Flags.*;
 
 public class AreaGeneratorTask implements Task {
-	public volatile static Area currentRoom = new Area();
-	public volatile static Area rangedRoom = new Area();
+	public volatile static Area currentRoom = new Area(new Tile[] {});
+	public volatile static Area rangedRoom = new Area(new Tile[] {});
 	private LinkedList<Tile> tilesOpen = new LinkedList<Tile>();
 	private LinkedList<Tile> tilesClosed = new LinkedList<Tile>();
 	

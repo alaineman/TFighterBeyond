@@ -6,7 +6,6 @@ import com.zalgoproductions.util.Sleeping;
 import org.powerbot.concurrent.Task;
 import org.powerbot.game.api.methods.Walking;
 import org.powerbot.game.api.methods.interactive.NPCs;
-import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.util.Random;
 import org.powerbot.game.api.util.Time;
 import org.powerbot.game.api.wrappers.interactive.NPC;
@@ -19,14 +18,8 @@ public class AttackTask implements Task {
 			if(Safespot.useSafespot)
 				Sleeping.waitForAnim();
 			else {  				
-				long start = System.currentTimeMillis();
-				while (System.currentTimeMillis() - start < 1500 && !Players.getLocal().isMoving() && 
-						Attacking.NPC_FILTER.accept(nearest)) {
-					Time.sleep(Random.nextInt(50, 200));
-				}
-				while (Players.getLocal().isMoving() && Attacking.NPC_FILTER.accept(nearest)) {
-					Time.sleep(Random.nextInt(20, 50));
-				}
+				Sleeping.waitForMovement();
+				Sleeping.waitWhileMoving();
 			}
 			if(Attacking.NPC_FILTER.accept(nearest)) {
 				Time.sleep(Random.nextInt(2000, 3000));
@@ -35,8 +28,10 @@ public class AttackTask implements Task {
 			Walking.walk(nearest.getLocation());
 			if(Safespot.useSafespot)
 				Sleeping.waitForAnim();
-			else
+			else {
+				Sleeping.waitForMovement();
 				Sleeping.waitWhileMoving();
+			}
 			Time.sleep((Random.nextInt(200, 500)));
 		}
 	}
